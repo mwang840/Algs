@@ -4,10 +4,9 @@ This function ignores the negative ints and exits once the input is -999
 '''
 def summation(sequence: list[int])->int:
     sum = 0
-    """In this case I'm going to use pythons all function which will check if ALL elements of the array are negative"""
-    if all((seq < 0 for seq in sequence)):
-           print("EMPTY")
-           return
+    """In this case I'm going to use pythons all function which will check if ALL elements of the array are negative OR the list is empty"""
+    if all((seq < 0 for seq in sequence) or len(sequence) == 0):
+           return "EMPTY"
     for seq in (sequence):
         """Checks to see if the value of the sequence AT that position is greater than -1, this should IGNORE all negatives"""
         if seq >= 0:
@@ -20,12 +19,17 @@ def summation(sequence: list[int])->int:
         
 
 def main():
-    testCases = int(input())
-    array: list[int] = []
-    for test in range(testCases):
-        number = int(input())
-        array.append(number)
-    print(summation(array))
+    # Get the filename from stdin
+    filename = input()
+
+    # Open the file and read in its contents
+    with open(filename) as data_file:
+        lines = data_file.readlines()
+
+    # Actually do the work
+    #first apply list comprehension that I found (https://stackoverflow.com/questions/7368789/convert-all-strings-in-a-list-to-int)
+    intlines = [int(x) for x in lines]
+    summation(intlines)
 
 
 if __name__ == "__main__":
