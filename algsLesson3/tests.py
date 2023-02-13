@@ -15,7 +15,13 @@ class TestLast(unittest.TestCase):
     def test_test(self):
         weird_test = answer.summation([-1, 2, 4, 5, 7])
         self.assertEqual(weird_test, 18)
-    
+    def test_hundreds(self):
+        hundreds = answer.summation([100, 100, 100, 100, 100, 100, 100])
+        self.assertEqual(hundreds, 700)
+        self.assertNotEqual(hundreds, 500)
+    def test_tens(self):
+        tens = answer.summation([10, -5, 20, 30, -10, 40, -999, 60]) 
+        self.assertEqual(tens, 100)   
 
 if __name__ == '__main__':
     unittest.main()        
