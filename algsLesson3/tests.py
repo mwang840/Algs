@@ -8,7 +8,7 @@ class TestLast(unittest.TestCase):
         self.assertEqual(actual, 30)
     def test_all_negatives(self):
         actual = answer.summation([-1, -1, -1, -1, -1])
-        self.assertEqual(actual, None)
+        self.assertEqual(actual, "EMPTY")
     def test_zero_grades(self):
         failure = answer.summation([0, 0, 0, 0, 0, 0])
         self.assertEqual(failure, 0)
