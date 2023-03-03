@@ -23,61 +23,86 @@ from operator import attrgetter
 
 class Student:
     ##A constructor that takes in the studentId, the current page number (if the code is P) and the current number of assignments graded (if the code is S)
-    def __init__(self, studentId: int, latestPageNum: int, numOfAssignmentsScore: int):
-        self.studentId = studentId
-        self.lowestPageNum = -1
-        self.latestPageNum = latestPageNum
-        self.numOfAssignmentsScore = numOfAssignmentsScore
-        self.submissionCount = 0
-        
-    ##repr model, prints out the object
-    def __repr__(self):
-        return f'{self.studentId} {self.latestPageNum} {self.numOfAssignmentsScore}'
+        studentId = 0
+        lowestPageNum = 0
+        latestPageNum = 0
+        numOfAssignmentsScore = 0
+        submissionCount = 0
+        averageScore = 0
+    
     ##Method to handle submission scores if the Action Code is an 'S'
 
 
 
 def sort_log_data(log: list[str]):
     students_to_handle = {}
-    totalLines = int(log[0].strip())
-    for lines in range(1, totalLines + 1):
+    totalLines = log[0]
+    log.pop(0)
+    logList = []
+    for r in range(int(totalLines)):
+        logList.append(log[r].split())
+    
+    
+    for lines in range(len(logList)):
         '''
         Split the log file to four elements in the string respectfully
         '''
-        studentId, actionCode, value, timeSpent = log[lines].strip()
-        value = int(value)
-        timeSpent = int(timeSpent)
         '''
         If the student is not in the dictionary, place it in and check if the student opens a page or submits an assignment
         '''
-        if studentId not in students_to_handle and (actionCode == "P" or actionCode == "S"):
-            students_to_handle[studentId] = Student(studentId)
+        if students_to_handle.get(logList[lines][0]):
+            currentStudent = students_to_handle.get(logList[lines][0])
+            if logList[lines][1] == "P":
+                currentStudent.latestPageNum = int(logList[lines][2])
+                if int(currentStudent.lowestPageNum) > int(logList[lines][2]) or int(currentStudent.lowestPageNum) == 0:
+                    currentStudent.lowestPageNum = int(logList[lines][2])
+            elif logList[lines][1] == "S":
+                currentStudent.numOfAssignmentsScore += int(logList[lines][2])
+                currentStudent.submissionCount += 1
+                currentStudent.averageScore = int(int(currentStudent.numOfAssignmentsScore)/int(currentStudent.submissionCount)) 
+            
+        else:
+            aNewStudent = Student()
+            aNewStudent.studentId = logList[lines][0]
+            if logList[lines][1] == "P":
+                aNewStudent.lowestPageNum = int(logList[lines][2])
+                aNewStudent.latestPageNum = int(logList[lines][2])
 
-        '''Checks if the actionCode is P'''
-        if actionCode == "P":
-            if students_to_handle[studentId].lowestPageNum == -1 or students_to_handle[studentId].lowestPageNum > value:
-                students_to_handle[studentId].lowestPageNum = value
-                ##Students latest page number is being updates
-                students_to_handle[studentId].latestPageNum = value
-        elif actionCode == "S":
-            students_to_handle[studentId].submissionCount += 1
-            students_to_handle[studentId].numOfAssignmentsScore += value
-        elif actionCode == "T":
-            pass    
-    averageScore = students_to_handle[studentId].numOfAssignmentsScore / students_to_handle[studentId].submissionCount
+            elif logList[lines][1] == "S":
+                aNewStudent.submissionCount += 1
+                aNewStudent.numOfAssignmentsScore += int(logList[lines][2])
+            students_to_handle[logList[lines][0]] = aNewStudent     
+
+        ##averageScore = students_to_handle[studentId].numOfAssignmentsScore / students_to_handle[studentId].submissionCount
     '''
     Convert dictionary to list and then call sort to sort it in order.
     '''
-    sortedList = sorted(students_to_handle, key=attrgetter("lowestPageNum", "latestPageNum", "averageScore"))
-    for sort in sortedList:
-        if sort.lowestPageNum >= 0 and sort.submissionCount >= 1:
-            print(sort)
+    studentList = []
+    for studentName in students_to_handle.values():
+        studentList.append(studentName)
+
+    studentString = ""
+    sortedList = sorted(studentList, key=attrgetter("lowestPageNum", "latestPageNum", "averageScore"))
+    for sort in studentList:
+        if int(sort.latestPageNum) != 0 and int(sort.averageScore) != 0:
+            studentString += str(sort.studentId) + " " + str(sort.lowestPageNum) + " " +  str(sort.latestPageNum) + " " + str(sort.averageScore) + "\n" 
+            print(sort.studentId, sort.lowestPageNum, sort.latestPageNum, sort.averageScore)
     return sortedList
 
 
-def main():
-    list = ["507 P 1000 1 1 S 6 2 1 P 1400 3 1 S 8 8 1 T 101 10 507 S 4 12 1 P 1700 15 1 S 7 16 507 S 8 20"]
-    (sort_log_data(list))
 
-if __name__ in "__main__":
-    main()    
+if __name__ == "__main__":
+    
+    # Get the filename from stdin
+    
+    
+    
+    filename = input()
+
+    # Open the file and read in its contents
+    with open(filename) as data_file:
+        lines = data_file.readlines()
+
+    # Actually do the work
+    sort_log_data(lines)
+    
