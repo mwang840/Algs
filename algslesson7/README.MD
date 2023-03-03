@@ -16,3 +16,5 @@ and current page number if the AccessCode is P. Otherwise if its access code is 
 <p>My algorithmic solution took around O(s log(s) + L) since I had to loop over the intial list, and check if it follows the certain conditions. If the condition is when the item is not in the dictionary, it follows the first if statement, otherwise a new student is created as well.</p>
 
 <p>I also asked Craig Barber for some clarification on some of my logic throughout my code. Some of my logic within my code for lesson 7 failed the guidelines but also once me and him took a look we were able to fix some logic correct and get my code to pass the gradescope tests</p>
+
+<p>Note although the algorithm passes the gradescope tests, it does not pass the tests that I've made which I will need to do some testing refactoring</p>

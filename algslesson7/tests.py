@@ -21,8 +21,21 @@ class TestLast(unittest.TestCase):
             '507 P 386 55\n']
         self.assertEqual(exampleAssignment, "507 10 386 253\n")
         
-   
+    def test_zeros(self):
+        zeros_only = ["0", ""]
+        self.assertEqual(zeros_only, " ")
 
+    def test_ones(self):
+        ones = ["1", "440 S 10 58\n"]   
+        self.assertEqual(ones, "440, 10, 58") 
+
+    def test_twos(self):
+        ones = ["2", "440 S 10 58\n", "507 P 10 60\n"]   
+        self.assertEqual(ones, "507, 10, 58")     
+
+    def test_same(self):
+        same = ["3", "440 S 10 58\n", "440 S 10 58\n", "440 S 10 58\n"]
+        self.assertEqual(same, "440, 10, 58")    
 
 if __name__ == '__main__':
     unittest.main()        
