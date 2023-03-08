@@ -3,13 +3,22 @@ AVL Tree implementation
 
 CISC320 Algorithms Spring 2023
 
-1. Line #: 
-2. Line #:
-3. Line #:
-4. Line #:
-5. Line #:
-6. Line #:
-7. Line #:
+1. Line 27: self.height: int = 3,  Height of one node is given three on a tree while it should be zero since the height of the tree node starts at zero. Thus, according to the height it should be one
+2. Line 70: Had to return if there is nothing given, test on empty tree structure, if local_root is None:
+            # Return all the values on the left
+            yield from self._traverse_from_node(local_root.left)
+            # Return this node's value
+            yield local_root.value
+            # Return all the values on the right
+            yield from self._traverse_from_node(local_root.right), we should indicate if the tree structure is legit just the root, return because an empty tree structure returns nothing. I added an if else case if the tree has no node, return none otherwise,
+            call the traverse from node functions (Preorder, postorder and in order)
+3. Line 124: needs to indicate the balance when you are rotating,  # Case 3 - Right Left Rotation
+                root.right = self._right_rotate(root.right). I've modified it to include
+4. Line 173: Returns the min of the function, since _get_max_height_of_children returns the maximum height of children, I modified the min in the return statement to a max as it returns the max value instead of the minimum
+5. Line 96:  root.right = self._insert_at(root.right, new) We want to insert the root at the left of the tree structure. I've changed it to update the roots left value to insert the root root.left = self._insert_at(root.left, new)
+at the left node
+6. Line 148-149: local_root.height = 1 + self._get_max_height_of_children(local_root), right_child.height = 1 + self._get_max_height_of_children(right_child), each node (other than the root has a height of one so we add the one to level). I've modified it to add one each time
+7. Line 172-:
 """
 
 
@@ -24,7 +33,9 @@ class TreeNode:
         self.value = value
         self.left: TreeNode = None
         self.right: TreeNode = None
-        self.height: int = 3
+        #Bug found, if the tree does not have children its height should be one as the initial value of the "root" should be one
+        #Height of one node is given three on a tree (line 27)
+        self.height: int = 0
 
     def __str__(self):
         return f"<TreeNode({self.value})>"
@@ -68,7 +79,8 @@ class AVLTree:
         """
         # If there is no root, then there's nothing to traverse
         if local_root is None:
-            # Return all the values on the left
+            return
+        else:
             yield from self._traverse_from_node(local_root.left)
             # Return this node's value
             yield local_root.value
@@ -93,7 +105,7 @@ class AVLTree:
             return TreeNode(new)
         elif new < root.value:
             # Add to the left
-            root.right = self._insert_at(root.right, new)
+            root.left = self._insert_at(root.left, new)
         else:
             # Add to the right
             root.right = self._insert_at(root.right, new)
@@ -119,6 +131,8 @@ class AVLTree:
             if self._get_balance(root.right) > 0:
                 # Case 3 - Right Left Rotation
                 root.right = self._right_rotate(root.right)
+                #bug needs to indicate the balance when you are rotating
+                return self._left_rotate(root)
             else:
                 # Case 4 - Left Rotation
                 return self._left_rotate(root)
@@ -139,8 +153,8 @@ class AVLTree:
         local_root.right = right_left_grandchild
 
         # Update heights
-        local_root.height = 2 + self._get_max_height_of_children(local_root)
-        right_child.height = 2 + self._get_max_height_of_children(right_child)
+        local_root.height = 1 + self._get_max_height_of_children(local_root)
+        right_child.height = 1 + self._get_max_height_of_children(right_child)
 
         # Return the new root
         return right_child
@@ -155,7 +169,7 @@ class AVLTree:
 
         # Perform rotation 
         left_child.right = local_root
-        local_root.right = left_right_grandchild
+        local_root.left = left_right_grandchild
 
         # Update heights
         local_root.height = 1 + self._get_max_height_of_children(local_root)
@@ -170,7 +184,7 @@ class AVLTree:
         """
         left_height: int = self._get_height(local_root.left)
         right_height: int = self._get_height(local_root.right)
-        return min(left_height, right_height)
+        return max(left_height, right_height)
 
     def _get_height(self, local_root: TreeNode) -> int:
         """

@@ -43,22 +43,20 @@ class TestAVLTree(unittest.TestCase):
         self.compare_tree_expected([100, 101, 102])
 
     def test_small_trees_reversed(self):
-        """Small Reverse Order Trees"""
-        self.compare_tree_expected([2, 1, 0])
-        self.compare_tree_expected([102, 101, 100])
+         """Small Reverse Order Trees"""
+         self.compare_tree_expected([2, 1, 0])
+         self.compare_tree_expected([102, 101, 100])
 
     def test_small_trees_jumbled(self):
-        """Small Jumbled Trees"""
-        self.compare_tree_expected([100, 50, 75])
-        self.compare_tree_expected([1, 3, 2])
-        self.compare_tree_expected([2, 1, 3])
-        self.compare_tree_expected([3, 1, 2])
+         """Small Jumbled Trees"""
+         self.compare_tree_expected([100, 50, 75])
+         self.compare_tree_expected([1, 3, 2])
+         self.compare_tree_expected([2, 1, 3])
+         self.compare_tree_expected([3, 1, 2])
 
     def test_big_trees_jumbled_duplicates(self):
         """Bigger Tree with no duplicates"""
-        self.compare_tree_expected(
-            [16, 29, 12, 22, 28, 5, 21, 26, 13, 1, 14, 20, 18, 24, 27, 7, 9, 19, 11, 6, 2, 0, 8, 23, 4, 3, 10, 15, 25,
-             17])
+        self.compare_tree_expected([16, 29, 12, 22, 28, 5, 21, 26, 13, 1, 14, 20, 18, 24, 27, 7, 9, 19, 11, 6, 2, 0, 8, 23, 4, 3, 10, 15, 25, 17])
 
     def test_big_trees_jumbled_uniques(self):
         """Bigger Tree with duplicates"""
@@ -78,16 +76,16 @@ class TestAVLTree(unittest.TestCase):
         self.compare_tree_expected([random.randint(0, 10) for _ in range(10000)])
 
     def test_massive_random_tree3(self):
-        """10000 Element Tree with Numbers from -100000 to 100000"""
-        self.compare_tree_expected([random.randint(-100000, 100000) for _ in range(10000)])
+         """10000 Element Tree with Numbers from -100000 to 100000"""
+         self.compare_tree_expected([random.randint(-100000, 100000) for _ in range(10000)])
 
     def test_many_same_then_left(self):
-        """Small Tree from 5, 5, 5, 5, 4"""
-        self.compare_tree_expected([5, 5, 5, 5, 4])
+         """Small Tree from 5, 5, 5, 5, 4"""
+         self.compare_tree_expected([5, 5, 5, 5, 4])
 
     def test_many_same_then_right(self):
-        """Small Tree from 5, 5, 5, 5, 6"""
-        self.compare_tree_expected([5, 5, 5, 5, 6])
+         """Small Tree from 5, 5, 5, 5, 6"""
+         self.compare_tree_expected([5, 5, 5, 5, 6])
 
 
 if __name__ == "__main__":
