@@ -18,7 +18,10 @@ CISC320 Algorithms Spring 2023
 5. Line 96:  root.right = self._insert_at(root.right, new) We want to insert the root at the left of the tree structure. I've changed it to update the roots left value to insert the root root.left = self._insert_at(root.left, new)
 at the left node
 6. Line 148-149: local_root.height = 1 + self._get_max_height_of_children(local_root), right_child.height = 1 + self._get_max_height_of_children(right_child), each node (other than the root has a height of one so we add the one to level). I've modified it to add one each time
-7. Line 172-:
+7. Line 172-173: The last bug was updating the left child's right node became the local root in the right rotation function but updated the left childs right again to be the grand child which was
+hella of confusing, thus throwing an maximum recursion depth. Once visualizing it out, the left childs right value should be the root and the left childs root should be the grand children. 
+ left_child.right = local_root
+        local_root.right = left_right_grandchild
 """
 
 
