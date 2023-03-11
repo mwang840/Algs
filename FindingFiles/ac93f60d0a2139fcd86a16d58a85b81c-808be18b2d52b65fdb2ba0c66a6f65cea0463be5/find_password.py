@@ -6,7 +6,7 @@ Some parts are incomplete! Please help me by filling in the blanks.
 
 from zipfile import Path
 import json
-
+import emoji
 
 def search_zip(folder: Path, file_type: str) -> list[Path]:
     """
@@ -64,7 +64,7 @@ def binary_search_time(values: list[any], low: int, high: int, target: int) -> a
          any: The data stored in the target element.
     """
     if low <= high:
-        middle_index = (low+ high) / 2
+        middle_index = (low+ high) // 2
         middle_value = values[middle_index]['time']
         if middle_value < target:
             return binary_search_time(values, middle_index+1, high, target)
@@ -93,6 +93,12 @@ def solve(maze: str, at: int, visited: set[int]) -> str:
     Returns:
         str: The final emoji at the end of the maze.
     """
+    if at == 0:
+        return ""
+    elif maze == emoji.emojize(":arrow_upper_right:"):
+        visited[at] = maze
+        return solve(maze, at+1, visited)
+        
 
 
 def main(location: list[str], target_time: int):
