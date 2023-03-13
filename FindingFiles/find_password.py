@@ -6,7 +6,7 @@ Some parts are incomplete! Please help me by filling in the blanks.
 
 from zipfile import Path
 import json
-import emoji
+
 
 def search_zip(folder: Path, file_type: str) -> list[Path]:
     """
@@ -95,10 +95,11 @@ def solve(maze: str, at: int, visited: set[int]) -> str:
     """
     if at == 0:
         return ""
-    elif maze == emoji.emojize(":arrow_upper_right:"):
+    elif maze == "→":
         visited[at] = maze
         return solve(maze, at+1, visited)
-        
+    elif maze == "↕":
+        return    
 
 
 def main(location: list[str], target_time: int):
