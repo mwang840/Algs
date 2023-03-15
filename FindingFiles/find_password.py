@@ -43,9 +43,9 @@ def access_path(data: dict or any, path: list[str]) -> any:
         any: The data stored in the last nested level of the `data` dictionary.
     """
     if path:
-        data = path[0]
+        ind = path[0]
         path = path[1:]
-        return access_path(data, path)
+        return access_path(data[ind], path)
     return data
 
 
@@ -93,23 +93,41 @@ def solve(maze: str, at: int, visited: set[int]) -> str:
     Returns:
         str: The final emoji at the end of the maze.
     """
-    password:str = ""
+
+    if at in visited:
+        return None
+    else:
+        visited.add(at)
+   
     if maze[at] == "X":
         return None
-    elif maze[at] == "→":
-        visited.add(at) 
-        return solve(maze, [at + int(maze[at + 1])], visited)
+    elif maze[at] == "→": 
+        return solve(maze, at + int(maze[at + 1]), visited)
     elif maze[at]== "←":
-        visited.add(at)
         return solve(maze, at - int(maze[at + 1]), visited)   
     elif maze[at] == "↗":
-        visited.add(at)
-        if(maze[at + 1] == "X" or maze[at + 2] == "X"):
-            return None
-        elif((maze[at + 1] == "🐕" or maze[at + 2] == "🐕") or (maze[at + 1] == "⚡")):
-            password += maze[at + 1]
-        return solve(maze, at + int(maze[at + 1]), visited)
-
+        d1 = solve(maze, at + int(maze[at + 1]), visited)
+        if d1 is None or d1 == "X":
+            return solve(maze, at + int(maze[at + 2]), visited)
+        else:
+            return d1
+        
+    elif maze[at] == "↖":
+        d1 = solve(maze, at - int(maze[at + 1]), visited)
+        if d1 is None or d1 == "X":
+            return solve(maze, at - int(maze[at + 2]), visited)
+        else:
+            return d1
+        
+    elif maze[at] == "↕":
+        d1 = solve(maze, at - int(maze[at + 1]), visited)
+        if d1 is None or d1 == "X":
+            return solve(maze, at + int(maze[at + 2]), visited) 
+        else:
+            return d1
+    else:
+        return maze[at]
+    
 def main(location: list[str], target_time: int):
     """
     The main function that runs all the other parts of the program, in the proper sequence.
@@ -135,10 +153,13 @@ def main(location: list[str], target_time: int):
     time_data = binary_search_time(passwords, 0, len(passwords)-1, target_time)
     maze = time_data['password']
     # Solve the 1d Maze
+    #print(maze)
     answer = solve(maze, 0, set())
     # Print the Answer
     print(answer)
+    #print(solve("→2↗85→7↖52←5↕28↕83X🤖↕57🌲🌻🐈🛸↖37←7→3🌜🧬🍎→6", 0, set()))
 
 
 if __name__ == '__main__':
-    main(["Basement 2", "Quadrant A", "Region 1", "North"], 6)
+
+    main(location = ["SubBasement 3B", "Zone 1", "Containment 3", "West"], target_time = 15)
