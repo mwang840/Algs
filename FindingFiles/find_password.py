@@ -20,7 +20,7 @@ def search_zip(folder: Path, file_type: str) -> list[Path]:
     Returns:
         list[Path]: All the matched Paths
     """
-    result = [Path]
+    result:list[Path] = []
     for folder_item in folder.iterdir():
         # Is it a directory?
         if folder_item.is_dir():
@@ -65,7 +65,7 @@ def binary_search_time(values: list[any], low: int, high: int, target: int) -> a
     """
     if low <= high:
         middle_index = (low+ high) // 2
-        middle_value = values[middle_index]['time']
+        middle_value = int(values[middle_index]['time'])
         if middle_value < target:
             return binary_search_time(values, middle_index+1, high, target)
         elif middle_value > target:
@@ -93,14 +93,22 @@ def solve(maze: str, at: int, visited: set[int]) -> str:
     Returns:
         str: The final emoji at the end of the maze.
     """
-    if at == 0:
-        return ""
-    elif maze == "→":
-        visited[at] = maze
-        return solve(maze, at+1, visited)
-    elif maze == "↕":
-        return    
-
+    password:str = ""
+    if maze[at] == "X":
+        return None
+    elif maze[at] == "→":
+        visited.add(at) 
+        return solve(maze, [at + int(maze[at + 1])], visited)
+    elif maze[at]== "←":
+        visited.add(at)
+        return solve(maze, at - int(maze[at + 1]), visited)   
+    elif maze[at] == "↗":
+        visited.add(at)
+        if(maze[at + 1] == "X" or maze[at + 2] == "X"):
+            return None
+        elif((maze[at + 1] == "🐕" or maze[at + 2] == "🐕") or (maze[at + 1] == "⚡")):
+            password += maze[at + 1]
+        return solve(maze, at + int(maze[at + 1]), visited)
 
 def main(location: list[str], target_time: int):
     """
