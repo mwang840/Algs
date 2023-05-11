@@ -4,49 +4,54 @@
 import heapq
 
 
-def to_matrix(lines: str) -> int:
+def to_matrix(lines: list[str]) -> int:
     count = 0
-    matrix = (lines.split("\n"))
+    matrix = lines
     for line in range(len(matrix)):
         matrix[line] = matrix[line].split(' ')
         for li in range(len(matrix)):
             matrix[line][li] = int(matrix[line][li])
             count = count + 1
-    print(matrix)
     return matrix
 
 
-def get_ada_location_bf(location: list[list[int]]) -> list[int]:
-    visited = [False]
-    list_of_ada_path = []
-    ada_distance_total = 0
-    min_val = 0
-    for loc in location:
-        for l in loc:
-            if min_val not in visited:
-                visited.append(min_val)
-                min_val = (heapq.nsmallest(2, l))[-1]
-                list_of_ada_path.append(min_val)
-                min_val = loc.index(min_val)
+def get_ada_location_bf(distances: list[list[int]]) -> list[int]:
+    unvisited_ada_locations = set(range(1, len(distances)))
+    visited_ada_locations = [0]
+    ada_visit_place = 0
+    totalCost = 0
+    while len(unvisited_ada_locations) != 0:
 
-    print(list_of_ada_path)
+        """
+        Meme large distance number cuz why not
+        """
+        min_ada_distance = 42069
+        for unvisited in unvisited_ada_locations:
+            if ada_visit_place != unvisited:
+                ada_min = distances[ada_visit_place][unvisited]
+                if ada_min < min_ada_distance:
+                    min_ada_distance = ada_min
+                    ada_visit_place = unvisited
+        unvisited_ada_locations.remove(ada_visit_place)
+        visited_ada_locations.append(ada_visit_place)
+    visited_ada_locations.append(visited_ada_locations[0])
 
-    return list_of_ada_path, ada_distance_total
+    for ada_place, visited in enumerate(visited_ada_locations[0:-1]):
+        if ada_place < len(visited_ada_locations):
+            totalCost += distances[visited][visited_ada_locations[ada_place + 1]]
 
-
-"""
-Helper function to find the minmum distance between some vertex and the other unvisited vertex
-"""
-def findMinAdaDistance(initial_ada_distance: int, list_of_ada_distances, distances):
-    min_distance = 42069
-    min_neigbhor = 0
-    for ada_neighbor in range(list_of_ada_distances):
-        current_distance = distances[initial_ada_distance][ada_neighbor]
-        if current_distance < min_distance:
-            min_distance = current_distance
-            min_neigbhor = ada_neighbor
-    return min_neigbhor
+        elif ada_place > len(visited_ada_locations) - 1:
+            totalCost += 0
+    approximate_output = ""
+    for index in range(len(visited_ada_locations) - 1):
+        approximate_output = approximate_output + str(visited_ada_locations[index]) + "\n"
+    approximate_output = approximate_output + str(totalCost)
+    return approximate_output
 
 
 if __name__ in "__main__":
-    (get_ada_location_bf(to_matrix("0 3 4 2 7\n3 0 4 6 3\n4 4 0 5 8\n2 6 5 0 6\n7 3 8 6 0")))
+    filename = input()
+    with open(filename) as f: lines = f.readlines()
+    ada_locations = to_matrix(lines)
+    print(get_ada_location_bf(ada_locations))
+
