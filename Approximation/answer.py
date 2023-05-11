@@ -1,7 +1,7 @@
 """Use a brute force algorithm to solve the
    "Nearest Neighbor Problem". The algorithm takes in a sequence of distances in a 2d adj matrix and follows the nearest neighbor algorithm
    """
-import heapq
+import random
 
 
 def to_matrix(lines: list[str]) -> int:
@@ -14,6 +14,9 @@ def to_matrix(lines: list[str]) -> int:
             count = count + 1
     return matrix
 
+
+def ada_2_opt(distances: list[list[int]]):
+    pass
 
 def get_ada_location_bf(distances: list[list[int]]) -> list[int]:
     unvisited_ada_locations = set(range(1, len(distances)))
@@ -46,6 +49,7 @@ def get_ada_location_bf(distances: list[list[int]]) -> list[int]:
     for index in range(len(visited_ada_locations) - 1):
         approximate_output = approximate_output + str(visited_ada_locations[index]) + "\n"
     approximate_output = approximate_output + str(totalCost)
+    print(type(approximate_output))
     return approximate_output
 
 
